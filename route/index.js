@@ -18,4 +18,10 @@ router
   // 登录
   .post('/login', controller.auth.login)
 
+  // 获取用户资料
+  .get('/auth', controller.auth.getAuth)
+
+  // 修改用户资料
+  .put('/auth', controller.auth.putAuth)
+
 module.exports = router

@@ -20,7 +20,7 @@ const authSchema = new mongoose.Schema({
   slogan: { type: String, default: '' },
 
   // 头像
-  grabatar: { type: String, default: '' },
+  gravatar: { type: String, default: '' },
 
   // 密码
   password: {
