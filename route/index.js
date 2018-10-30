@@ -24,4 +24,10 @@ router
   // 修改用户资料
   .put('/auth', controller.auth.putAuth)
 
+  // 获取网站信息
+  .get('/option', controller.option.getOption)
+
+  // 更改网站信息
+  .put('/option', controller.option.putOption)
+
 module.exports = router
