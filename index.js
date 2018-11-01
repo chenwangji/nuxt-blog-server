@@ -9,6 +9,7 @@ const helmet = require('koa-helmet')
 
 const mongodb = require('./mongodb')
 const router = require('./route')
+const interceptor = require('./middlewares/interceptor')
 
 const app = new Koa()
 
@@ -22,6 +23,7 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
+app.use(interceptor)
 
 app.use(helmet())
 app.use(koaBody({
@@ -35,6 +37,7 @@ app.use(async (ctx, next) => {
   try {
     await next()
   } catch (error) {
+    console.log(error)
     ctx.body = { code: 0, message: '服务器内部错误' }
   }
   if (ctx.status === 404 || ctx.status === 405) {

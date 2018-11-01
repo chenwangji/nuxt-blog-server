@@ -25,3 +25,11 @@ exports.AUTH = {
   defaultUsername: argv.auth_default_username || 'wangji',
   defaultPassword: argv.auth_default_password || '123456'
 }
+
+exports.QINIU = {
+  accessKey: argv.qn_accessKey || 'Cl4Fwt0s4BCbM5EEVQNcwGELQWg4i_u79STasYHE',
+  secretKey: argv.qn_secretKey || '7b_DfS6flXCeQTg8cHZ20skux3mn2G2TC_9NGIGH',
+  bucket: argv.qn_bucket || 'nuxt-blog',
+  origin: argv.qn_origin || 'http://nuxt-blog.u.qiniudn.com',
+  uploadURL: 'http://up.qiniu.com/'
+}

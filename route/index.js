@@ -30,4 +30,7 @@ router
   // 更改网站信息
   .put('/option', controller.option.putOption)
 
+  // 获取七牛 token
+  .get('/qiniu', controller.qiniu.getQN)
+
 module.exports = router

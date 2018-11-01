@@ -22,13 +22,9 @@ class OptionController {
   static async putOption (ctx) {
     const { _id } = ctx.request.body
     const option = await (_id
-      ? Option.findByIdAndUpdate(_id, ctx.request.body, { new: true })
-      : new Option(ctx.request.body).save()
+      ? Option.findByIdAndUpdate(_id, ctx.request.body, { new: true }).catch(() => ctx.throw(500, '服务器内部错误'))
+      : new Option(ctx.request.body).save().catch(() => ctx.throw(500, '服务器内部错误'))
     )
-      .catch(() => ctx.throw(500, '服务器内部错误'))
-
-    console.log(option)
-
     if (option) handleSuccess({ ctx, result: option._id, message: '修改配置项成功' })
     else handleError({ ctx, message: '修改配置项失败' })
   }

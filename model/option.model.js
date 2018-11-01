@@ -6,7 +6,7 @@ const mongoose = require('../mongodb').mongoose
 
 const optionSchema = new mongoose.Schema({
   // 网站标题
-  titile: { type: String, required: true },
+  title: { type: String, required: true },
 
   // 网站副标题
   sub_title: { type: String, required: true },
