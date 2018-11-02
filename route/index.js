@@ -33,4 +33,19 @@ router
   // 获取七牛 token
   .get('/qiniu', controller.qiniu.getQN)
 
+  // 获取标签列表
+  .get('/tag', controller.tag.getTags)
+
+  // 添加标签
+  .post('/tag', controller.tag.postTag)
+
+  // 修改标签
+  .put('/tag/:id', controller.tag.putTag)
+
+  // 删除标签
+  .delete('/tag/:id', controller.tag.deleteTag)
+
+  // 标签排序
+  .patch('/tag', controller.tag.patchTag)
+
 module.exports = router

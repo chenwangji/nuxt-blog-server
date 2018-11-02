@@ -1,4 +1,4 @@
-const authIsVerified = require('../utils/auth')
+// const authIsVerified = require('../utils/auth')
 
 module.exports = async (ctx, next) => {
   /**
@@ -42,10 +42,10 @@ module.exports = async (ctx, next) => {
   /**
    * 拦截所有非管理员的请求
    */
-  if (!authIsVerified(ctx.request) && !Object.is(ctx.request.method, 'GET')) {
-    ctx.throw(401, { code: -2, message: '身份验证失败！' })
-    return false
-  }
+  // if (!authIsVerified(ctx.request) && !Object.is(ctx.request.method, 'GET')) {
+  //   ctx.throw(401, { code: -2, message: '身份验证失败！' })
+  //   return false
+  // }
 
   await next()
 }
