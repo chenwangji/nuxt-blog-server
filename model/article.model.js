@@ -9,7 +9,7 @@ autoIncreatment.initialize(mongoose.connection)
 
 const articleSchema = new mongoose.Schema({
   // 文章标题
-  title: { type: String, requiredL: true },
+  title: { type: String, required: true },
 
   // 关键字
   keyword: { type: String, required: true },

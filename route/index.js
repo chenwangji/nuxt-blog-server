@@ -8,6 +8,9 @@ const router = new Router({
 
 // api
 router
+  /**
+   * auth
+   */
   .get('/', (ctx, next) => {
     ctx.response.body = config.INFO
   })
@@ -24,15 +27,24 @@ router
   // 修改用户资料
   .put('/auth', controller.auth.putAuth)
 
+  /**
+   * options
+   */
   // 获取网站信息
   .get('/option', controller.option.getOption)
 
   // 更改网站信息
   .put('/option', controller.option.putOption)
 
+  /**
+   * qiniu
+   */
   // 获取七牛 token
   .get('/qiniu', controller.qiniu.getQN)
 
+  /**
+   * tag
+   */
   // 获取标签列表
   .get('/tag', controller.tag.getTags)
 
@@ -47,5 +59,13 @@ router
 
   // 标签排序
   .patch('/tag', controller.tag.patchTag)
+
+  /**
+   * article
+   */
+  // 文章列表
+  .get('/article', controller.article.getArts)
+  // 添加文章
+  .post('/article', controller.article.postArt)
 
 module.exports = router
