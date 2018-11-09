@@ -111,6 +111,7 @@ class TagController {
   }
 
   // 标签排序
+  // TODO: 这种排序在分页中有漏洞：非第一页的排序，会将优先级排到第一页
   static async patchTag (ctx) {
     const { ids } = ctx.request.body
     try {
@@ -119,9 +120,10 @@ class TagController {
           .findByIdAndUpdate(ids[i], { sort: i + 1 })
           .catch(e => ctx.throw(500, '服务器内部错误'))
       }
+      handleSuccess({ ctx, message: '排序成功' })
     } catch (e) {
       console.log(e)
-      handleError({ ctx, message: '排序成功' })
+      handleError({ ctx, message: '排序失败' })
     }
   }
 }
