@@ -114,6 +114,31 @@ class ArticleControllser {
     if (res) handleSuccess({ ctx, message: '添加文章成功' })
     else handleError({ ctx, message: '添加违章失败' })
   }
+
+  // 修改文章状态
+  static async patchArt (ctx) {
+    const _id = ctx.params.id
+    const { state, publish } = ctx.request.body
+
+    const querys = {}
+
+    if (state) querys.state = state
+    if (publish) querys.publish = publish
+
+    if (!_id) {
+      handleError({ ctx, message: '无效参数' })
+      return false
+    }
+
+    const res = await Article
+      .findByIdAndUpdate(_id, querys)
+      .catch(e => {
+        console.log(e)
+        ctx.throw(500, '服务器内部错误')
+      })
+    if (res) handleSuccess({ ctx, message: '更新文章状态成功' })
+    else handleError({ ctx, message: '更新文章状态失败' })
+  }
 }
 
 module.exports = ArticleControllser

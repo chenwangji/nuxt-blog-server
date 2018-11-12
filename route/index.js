@@ -65,7 +65,10 @@ router
    */
   // 文章列表
   .get('/article', controller.article.getArts)
+
   // 添加文章
   .post('/article', controller.article.postArt)
 
+  // 修改文章状态
+  .patch('/article', controller.article.patchArt)
 module.exports = router
