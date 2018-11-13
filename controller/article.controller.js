@@ -118,11 +118,13 @@ class ArticleControllser {
   // 修改文章状态
   static async patchArt (ctx) {
     const _id = ctx.params.id
+
     const { state, publish } = ctx.request.body
 
     const querys = {}
 
     if (state) querys.state = state
+
     if (publish) querys.publish = publish
 
     if (!_id) {
@@ -132,12 +134,74 @@ class ArticleControllser {
 
     const res = await Article
       .findByIdAndUpdate(_id, querys)
-      .catch(e => {
-        console.log(e)
-        ctx.throw(500, '服务器内部错误')
-      })
+      .catch(() => ctx.throw(500, '服务器内部错误'))
     if (res) handleSuccess({ ctx, message: '更新文章状态成功' })
     else handleError({ ctx, message: '更新文章状态失败' })
+  }
+
+  // 删除文章
+  static async deleteArt (ctx) {
+    const _id = ctx.params.id
+
+    if (!_id) {
+      handleError({ ctx, message: '无效参数' })
+      return false
+    }
+
+    const res = await Article
+      .findByIdAndRemove(_id)
+      .catch(() => ctx.throw(500, '服务器内部错误'))
+    if (res) handleSuccess({ ctx, message: '删除文章成功' })
+    else handleError({ ctx, message: '删除文章失败' })
+  }
+
+  // 根据文章 id 获取内容
+  static async getArt (ctx) {
+    const _id = ctx.params.id
+
+    if (!_id) {
+      handleError({ ctx, message: '无效参数' })
+      return false
+    }
+
+    const res = await Article
+      .findById(_id)
+      .populate('tag')
+      .catch(() => ctx.throw(500, '服务器内部错误'))
+    if (res) {
+      // 每次请求，views 自增1
+      res.meta.views += 1
+      res.save()
+      handleSuccess({ ctx, message: '文章获取成功', result: res })
+    } else handleError({ ctx, message: '获取文章失败' })
+  }
+
+  // 修改文章
+  static async putArt (ctx) {
+    const _id = ctx.params.id
+
+    const { title, keyword } = ctx.request.body
+
+    delete ctx.request.body.create_at
+    delete ctx.request.body.update_at
+    delete ctx.request.body.meta
+
+    if (!_id) {
+      handleError({ ctx, message: '无效参数' })
+      return false
+    }
+
+    if (!title || !keyword) {
+      handleError({ ctx, message: 'title 和 keyword 必填' })
+      return false
+    }
+
+    const res = await Article
+      .findByIdAndUpdate(_id, ctx.request.body)
+      .catch(() => ctx.throw(500, '服务器内部错误'))
+
+    if (res) handleSuccess({ ctx, message: '更新文章成功' })
+    else handleError({ ctx, message: '更新文章失败' })
   }
 }
 

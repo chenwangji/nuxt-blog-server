@@ -70,5 +70,14 @@ router
   .post('/article', controller.article.postArt)
 
   // 修改文章状态
-  .patch('/article', controller.article.patchArt)
+  .patch('/article/:id', controller.article.patchArt)
+
+  // 删除文章
+  .delete('/article/:id', controller.article.deleteArt)
+
+  // 获取文章
+  .get('/article/:id', controller.article.getArt)
+
+  // 修改文章
+  .put('/article/:id', controller.article.putArt)
 module.exports = router

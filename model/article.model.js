@@ -23,14 +23,14 @@ const articleSchema = new mongoose.Schema({
   // 内容
   content: { type: String, required: true },
 
-  // 状态 1-发布 2-草稿
+  // 状态 1-草稿 2-发布
   state: { type: Number, default: 1 },
 
-  // 文章公开状态 1-公开 2-私密
-  pubulish: { type: Number, default: 1 },
+  // 文章公开状态 1-私密 2-公开
+  publish: { type: Number, default: 1 },
 
   // 缩略图
-  thumb: { type: Number },
+  thumb: String,
 
   // 文章分类 1-code 2-think 3-funk
   type: { type: Number },
@@ -64,6 +64,7 @@ articleSchema.plugin(autoIncreatment.plugin, {
 // 时间更新
 articleSchema.pre('findOneAndUpdate', function (next) {
   this.findOneAndUpdate({}, { update_at: Date.now() })
+  next() // 中间件一定要记得调用 next
 })
 
 // 文章模型
