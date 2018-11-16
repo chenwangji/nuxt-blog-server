@@ -80,4 +80,10 @@ router
 
   // 修改文章
   .put('/article/:id', controller.article.putArt)
+
+  /**
+   * 喜欢
+   */
+  .post('/like', controller.like.postLike)
+
 module.exports = router
