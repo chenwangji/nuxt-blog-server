@@ -86,4 +86,13 @@ router
    */
   .post('/like', controller.like.postLike)
 
+  /**
+   * 评论
+   */
+  // 获取评论列表
+  .get('/comments', controller.comment.getComments)
+
+  // 发表评论
+  .post('/comment', controller.comment.postComment)
+
 module.exports = router

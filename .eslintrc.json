@@ -2,5 +2,14 @@
 {
   "extends": "standard",
   "globals": {
+
+  },
+  "rules": {
+    "camelcase": [
+      0,
+      {
+          "properties": "never"
+      }
+  ]
   }
 }

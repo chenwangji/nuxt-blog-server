@@ -4,11 +4,14 @@
   "description": "node api service",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_ENV=production node --harmony index.js",
+    "dev": "nodemon --exec \"NODE_ENV=development node --harmony index.js\"",
+    "update-geoip-db": "node ./node_modules/geoip-lite/scripts/updatedb.js"
   },
   "author": "chenwangji <694093637@qq.com>",
   "license": "ISC",
   "dependencies": {
+    "geoip-lite": "^1.3.3",
     "jsonwebtoken": "^8.3.0",
     "koa": "^2.6.1",
     "koa-body": "^4.0.4",
