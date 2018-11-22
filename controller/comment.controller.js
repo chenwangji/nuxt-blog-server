@@ -91,7 +91,6 @@ class CommentController {
       ctx.req.ips[0]).replace('::ffff:', '')
     comment.ip = ip
     comment.agent = ctx.headers['user-agent'] || comment.agent
-    console.log(comment)
 
     const ipLocation = geoip.lookup(ip)
 
@@ -102,7 +101,7 @@ class CommentController {
     }
 
     comment.likes = 0
-    // comment.author = JSON.parse(comment.author)
+    comment.author = JSON.parse(comment.author)
 
     const res = await new Comment(comment)
       .save()
@@ -111,6 +110,48 @@ class CommentController {
     if (res) {
       handleSuccess({ ctx, result: res, message: '评论发布成功' })
     } else handleError({ ctx, message: '评论发布失败' })
+  }
+
+  // 删除评论
+  static async deleteComment (ctx) {
+    const _id = ctx.params.id
+
+    // const post_id = Array.of(Number(ctx.query.post_ids))
+
+    const res = await Comment
+      .findByIdAndRemove(_id)
+      .catch(() => ctx.throw(500, '服务器内部错误'))
+
+    if (res) {
+      handleSuccess({ ctx, message: '评论删除成功' })
+    } else handleError({ ctx, message: '评论删除失败' })
+  }
+
+  // 修改评论
+  static async putComment (ctx) {
+    const _id = ctx.params.id
+    let {
+      post_ids,
+      state,
+      author
+    } = ctx.request.body
+
+    if (Object.is(state, undefined) || Object.is(post_ids, undefined)) {
+      ctx.throw(401, '参数无效')
+      return
+    }
+
+    // if (author) author = JSON.parse(author)
+
+    post_ids = Array.of(Number(post_ids))
+
+    const res = await Comment
+      .findByIdAndUpdate(_id, { ...ctx.request.body, author })
+      .catch(() => ctx.throw(500, '服务器内部错误'))
+
+    if (res) {
+      handleSuccess({ ctx, message: '评论状态修改成功' })
+    } else handleError({ ctx, message: '评论状态修改失败' })
   }
 }
 

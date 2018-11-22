@@ -95,4 +95,10 @@ router
   // 发表评论
   .post('/comment', controller.comment.postComment)
 
+  // 修改评论
+  .put('/comment/:id', controller.comment.putComment)
+
+  // 删除评论
+  .delete('/comment/:id', controller.comment.deleteComment)
+
 module.exports = router

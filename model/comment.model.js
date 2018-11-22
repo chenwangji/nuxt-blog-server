@@ -33,17 +33,17 @@ const commentSchema = new mongoose.Schema({
   agent: { type: String, validate: /\S+/ },
 
   // 评论产生者
-  // author: {
-  //   name: { type: String, required: true, validate: /\S+/ },
-  //   email: { type: String, required: true, validate: /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/ },
-  //   site: { type: String, validate: /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[/=?%\-&_~`@[\]':+!]*([^<>""])*$/ }
-  // },
+  author: {
+    name: { type: String, required: true, validate: /\S+/ },
+    email: { type: String, required: true, validate: /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/ },
+    site: { type: String, validate: /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[/=?%\-&_~`@[\]':+!]*([^<>""])*$/ }
+  },
 
   // 状态 0待审核 1通过 2不通过
   state: { type: Number, default: 1 },
 
   // 发布日期
-  create_ate: { type: Date, default: Date.now },
+  create_at: { type: Date, default: Date.now },
 
   // 最后修改日期
   update_at: { type: Date }
