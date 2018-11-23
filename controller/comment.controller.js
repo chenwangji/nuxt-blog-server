@@ -1,8 +1,42 @@
 /** 评论控制器 */
 const { handleError, handleSuccess } = require('../utils/handle')
 const Comment = require('../model/comment.model')
-// const Article = require('../model/article.model')
+const Article = require('../model/article.model')
 const geoip = require('geoip-lite')
+
+// 更新文章评论数
+const updateArticleCommentCount = (post_ids = []) => {
+  post_ids = [...new Set(post_ids)].filter(id => !!id)
+  if (post_ids.length) {
+    Comment.aggregate([
+      { $match: { state: 1, post_id: { $in: post_ids } } },
+      { $group: { _id: '$post_id', num_tutorial: { $sum: 1 } } }
+    ])
+      .then(counts => {
+        if (counts.length === 0) {
+          Article.update({ id: post_ids[0] }, { $set: { 'meta.comments': 0 } })
+            .then(info => {})
+            .catch(err => console.log(err))
+        } else {
+          counts.forEach(count => {
+            Article.update(
+              { id: count._id },
+              { $set: { 'meta.comments': count.num_tutorial } }
+            )
+              .then(info => {
+                // console.log('评论聚合更新成功', info);
+              })
+              .catch(err => {
+                console.warn('评论聚合更新失败', err)
+              })
+          })
+        }
+      })
+      .catch(err => {
+        console.warn('更新评论count聚合数据前，查询失败', err)
+      })
+  }
+}
 
 class CommentController {
   // 获取评论列表
@@ -44,7 +78,7 @@ class CommentController {
     if (keyword) {
       const keywordReg = new RegExp(keyword)
       querys['$or'] = [
-        { 'content': keywordReg },
+        { content: keywordReg },
         { 'author.name': keywordReg },
         { 'author.email': keywordReg }
       ]
@@ -56,9 +90,9 @@ class CommentController {
     }
 
     // 获取评论列表
-    const comments = await Comment
-      .paginate(querys, options)
-      .catch(() => ctx.throw(500, '服务器内部错错'))
+    const comments = await Comment.paginate(querys, options).catch(() =>
+      ctx.throw(500, '服务器内部错错')
+    )
 
     if (comments) {
       handleSuccess({
@@ -82,13 +116,15 @@ class CommentController {
     const { body: comment } = ctx.request
 
     // 获取 ip 地址及物理地址
-    const ip = (ctx.req.headers['x-forwarded-for'] ||
+    const ip = (
+      ctx.req.headers['x-forwarded-for'] ||
       ctx.req.headers['x-real-ip'] ||
       ctx.req.connection.remoteAddress ||
       ctx.req.socket.remoteAddress ||
       ctx.req.connection.socket.remoteAddress ||
       ctx.req.ip ||
-      ctx.req.ips[0]).replace('::ffff:', '')
+      ctx.req.ips[0]
+    ).replace('::ffff:', '')
     comment.ip = ip
     comment.agent = ctx.headers['user-agent'] || comment.agent
 
@@ -101,7 +137,7 @@ class CommentController {
     }
 
     comment.likes = 0
-    comment.author = JSON.parse(comment.author)
+    // comment.author = JSON.parse(comment.author)
 
     const res = await new Comment(comment)
       .save()
@@ -109,6 +145,7 @@ class CommentController {
 
     if (res) {
       handleSuccess({ ctx, result: res, message: '评论发布成功' })
+      updateArticleCommentCount([res.post_id])
     } else handleError({ ctx, message: '评论发布失败' })
   }
 
@@ -118,9 +155,9 @@ class CommentController {
 
     // const post_id = Array.of(Number(ctx.query.post_ids))
 
-    const res = await Comment
-      .findByIdAndRemove(_id)
-      .catch(() => ctx.throw(500, '服务器内部错误'))
+    const res = await Comment.findByIdAndRemove(_id).catch(() =>
+      ctx.throw(500, '服务器内部错误')
+    )
 
     if (res) {
       handleSuccess({ ctx, message: '评论删除成功' })
@@ -130,11 +167,7 @@ class CommentController {
   // 修改评论
   static async putComment (ctx) {
     const _id = ctx.params.id
-    let {
-      post_ids,
-      state,
-      author
-    } = ctx.request.body
+    let { post_ids, state, author } = ctx.request.body
 
     if (Object.is(state, undefined) || Object.is(post_ids, undefined)) {
       ctx.throw(401, '参数无效')
@@ -145,9 +178,10 @@ class CommentController {
 
     post_ids = Array.of(Number(post_ids))
 
-    const res = await Comment
-      .findByIdAndUpdate(_id, { ...ctx.request.body, author })
-      .catch(() => ctx.throw(500, '服务器内部错误'))
+    const res = await Comment.findByIdAndUpdate(_id, {
+      ...ctx.request.body,
+      author
+    }).catch(() => ctx.throw(500, '服务器内部错误'))
 
     if (res) {
       handleSuccess({ ctx, message: '评论状态修改成功' })
