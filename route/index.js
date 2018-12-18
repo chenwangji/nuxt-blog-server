@@ -81,6 +81,9 @@ router
   // 修改文章
   .put('/article/:id', controller.article.putArt)
 
+  // 文章归档
+  .get('/getAllArts', controller.article.getAllArts)
+
   /**
    * 喜欢
    */
