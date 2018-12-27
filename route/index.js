@@ -104,4 +104,16 @@ router
   // 删除评论
   .delete('/comment/:id', controller.comment.deleteComment)
 
+  // 获取留言列表
+  .get('/heros', controller.heros.getHeros)
+
+  // 发布留言
+  .post('/hero', controller.heros.postHero)
+
+  // 删除留言
+  .delete('/hero/:id', controller.heros.deleteHero)
+
+  // 修改留言状态
+  .patch('/hero', controller.heros.patchHero)
+
 module.exports = router
