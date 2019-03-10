@@ -3,6 +3,7 @@
  */
 
 const Article = require('../model/article.model')
+const Comment = require('../model/comment.model')
 const { handleSuccess, handleError } = require('../utils/handle')
 
 class LikeController {
@@ -16,7 +17,7 @@ class LikeController {
     }
 
     // type 0-文章 1-评论
-    const res = await Article
+    const res = await (Number(type) === 0 ? Article : Comment)
       .findById(_id)
       .catch(() => ctx.throw(500, '服务器内部错误'))
 

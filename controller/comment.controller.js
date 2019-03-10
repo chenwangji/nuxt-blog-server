@@ -42,7 +42,7 @@ class CommentController {
   // 获取评论列表
   static async getComments (ctx) {
     let {
-      sort = -1,
+      sort = 1,
       current_page = 1,
       page_size = 20,
       keyword = '',

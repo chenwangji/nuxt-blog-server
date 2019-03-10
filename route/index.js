@@ -81,6 +81,9 @@ router
   // 修改文章
   .put('/article/:id', controller.article.putArt)
 
+  // 文章归档
+  .get('/getAllArts', controller.article.getAllArts)
+
   /**
    * 喜欢
    */
@@ -100,5 +103,32 @@ router
 
   // 删除评论
   .delete('/comment/:id', controller.comment.deleteComment)
+
+  // 获取留言列表
+  .get('/heros', controller.heros.getHeros)
+
+  // 发布留言
+  .post('/hero', controller.heros.postHero)
+
+  // 删除留言
+  .delete('/hero/:id', controller.heros.deleteHero)
+
+  // 修改留言状态
+  .patch('/hero', controller.heros.patchHero)
+
+  // 获取友链列表
+  .get('/links', controller.links.getLinks)
+
+  // 添加友链
+  .post('/link', controller.links.postLink)
+
+  // 修改友链状态
+  .patch('/link/:id', controller.links.patchLink)
+
+  // 修改友链
+  .put('/link/:id', controller.links.putLink)
+
+  // 删除友链
+  .delete('/link/:id', controller.links.deleteLink)
 
 module.exports = router
