@@ -6,13 +6,15 @@ module.exports = async (ctx, next) => {
    */
   const allowedOrigins = [
     // 白名单
+    'http://log.todyto.cn',
+    'http://www.todyto.cn:8000'
   ]
   const { origin = '' } = ctx.request
-  if (allowedOrigins.includes(origin) || origin.includes('localhost')) {
+  // if (allowedOrigins.includes(origin) || origin.includes('localhost')) {
     // 不起作用 --- ？？？
     // ctx.set('Access-Control-Allow-Origin', origin)
     ctx.set('Access-Control-Allow-Origin', '*')
-  }
+  // }
 
   ctx.set({
     'Access-Control-Allow-Headers': 'Authorization, Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With',
